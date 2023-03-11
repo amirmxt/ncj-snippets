@@ -28,7 +28,7 @@ async function fetchJobsOnPage(url) {
       const link = $(element).find('a').attr('href');
       if (!processedLinks.has(link)) {
         processedLinks.add(link);
-        if (jobTitle.toLowerCase().includes('bubble.io developer')) {
+        if (jobTitle.toLowerCase().includes('webflow')) {
           linkedinJobs.push({
             'Title': jobTitle,
             'Company': company,
@@ -39,7 +39,7 @@ async function fetchJobsOnPage(url) {
         numProcessedJobs++;
       }
     });
-    console.log(`Page ${numProcessedJobs/25+1} done.`);
+    console.log(`Page ${numProcessedJobs / 25 + 1} done.`);
   } catch (error) {
     console.error(error);
   }
@@ -49,7 +49,7 @@ async function fetchAllJobs() {
   let hasMoreResults = true;
   let pageNumber = 0;
   while (hasMoreResults) {
-    const url = `https://www.linkedin.com/jobs/search/?currentJobId=3480612720&f_TPR=r604800&f_WT=1%2C2%2C3&geoId=92000000&keywords=%22Bubble.io%20Developer%22&location=Worldwide&refresh=true&sortBy=R${pageNumber}`;
+    const url = `https://www.linkedin.com/jobs/search/?currentJobId=3294730327&f_TPR=r604800&f_WT=1%2C2%2C3&geoId=92000000&keywords=%22Webflow%20Developer%22&location=Worldwide&refresh=true&sortBy=R${pageNumber}`;
     await fetchJobsOnPage(url);
     hasMoreResults = linkedinJobs.length > numProcessedJobs;
     pageNumber += 25;
@@ -59,12 +59,13 @@ async function fetchAllJobs() {
 async function writeCsv() {
   const csv = new ObjectsToCsv(linkedinJobs);
   try {
-    await csv.toDisk('./search-bubble.csv', { append: true });
+    await csv.toDisk(__dirname + '/../exports/search-webflow.csv', { append: true });
     console.log('CSV file created successfully.');
   } catch (error) {
     console.error('Failed to write to CSV file:', error);
   }
 }
+
 
 (async function () {
   await readExistingLinks();
